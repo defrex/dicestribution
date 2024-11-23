@@ -8,7 +8,7 @@ interface DistributionBarChartProps {
 export function DistributionBarChart({
   distribution,
 }: DistributionBarChartProps) {
-  const simplifiedDistribution = simplifyDistribution(distribution, 20);
+  const simplifiedDistribution = simplifyDistribution(distribution, 12);
 
   // Extract and sort the keys (results)
   const results = Object.keys(simplifiedDistribution)
