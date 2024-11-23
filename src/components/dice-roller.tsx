@@ -45,7 +45,8 @@ export function Dicestribution() {
       className={cn(
         "min-h-screen",
         "flex",
-        "items-center",
+        "items-end",
+        "md:items-center",
         "justify-center",
         "p-4",
         "bg-gray-900"
@@ -67,34 +68,43 @@ export function Dicestribution() {
             Dicestribution
           </CardTitle>
         </CardHeader>
-        <CardContent className={cn("space-y-6")}>
+        <CardContent
+          className={cn("space-y-6", "flex", "flex-col", "md:gap-12")}
+        >
+          <div
+            className={cn(
+              "rounded-md",
+              "flex",
+              "items-center",
+              "justify-center",
+              "text-white",
+              "order-1",
+              "md:order-3"
+            )}
+          >
+            <DistributionBarChart distribution={distribution} />
+          </div>
+
           <div
             className={cn(
               "flex",
               "flex-col",
               "justify-center",
               "items-center",
-              "gap-4"
+              "gap-4",
+              "order-2"
             )}
           >
-            <div className={cn("flex", "flex-wrap", "gap-2", "md:w-1/2")}>
-              {diceTypes.map((dieType) => (
-                <Button
-                  key={dieType}
-                  onClick={() => rollDie(dieType)}
-                  className={cn(
-                    "flex-1",
-                    "min-w-[60px]",
-                    "bg-pink-500",
-                    "hover:bg-pink-600",
-                    "text-white"
-                  )}
-                >
-                  d{dieType}
-                </Button>
-              ))}
-            </div>
-            <div className={cn("relative", "flex-1", "md:w-1/2")}>
+            <div
+              className={cn(
+                "relative",
+                "flex-1",
+                "w-full",
+                "md:w-1/2",
+                "order-2",
+                "md:order-1"
+              )}
+            >
               <div
                 className={cn(
                   "text-lg",
@@ -132,18 +142,34 @@ export function Dicestribution() {
                 <RefreshCw className={cn("h-5", "w-5")} />
               </Button>
             </div>
-          </div>
-          {/* Space for future additions */}
-          <div
-            className={cn(
-              "rounded-md",
-              "flex",
-              "items-center",
-              "justify-center",
-              "text-white"
-            )}
-          >
-            <DistributionBarChart distribution={distribution} />
+
+            <div
+              className={cn(
+                "flex",
+                "flex-wrap",
+                "gap-2",
+                "w-full",
+                "md:w-1/2",
+                "order-3",
+                "md:order-2"
+              )}
+            >
+              {diceTypes.map((dieType) => (
+                <Button
+                  key={dieType}
+                  onClick={() => rollDie(dieType)}
+                  className={cn(
+                    "flex-1",
+                    "min-w-[60px]",
+                    "bg-pink-500",
+                    "hover:bg-pink-600",
+                    "text-white"
+                  )}
+                >
+                  d{dieType}
+                </Button>
+              ))}
+            </div>
           </div>
         </CardContent>
       </Card>
