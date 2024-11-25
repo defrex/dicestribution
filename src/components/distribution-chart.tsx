@@ -8,17 +8,22 @@ interface DistributionBarChartProps {
 export function DistributionBarChart({
   distribution,
 }: DistributionBarChartProps) {
-  const simplifiedDistribution = simplifyDistribution(distribution, 12);
-
-  // Extract and sort the keys (results)
-  const results = Object.keys(simplifiedDistribution)
+  const barsDistribution = simplifyDistribution(
+    distribution,
+    Math.min(Object.values(distribution).length, 48)
+  );
+  const bars = Object.keys(barsDistribution)
     .map(Number)
     .sort((a, b) => a - b);
 
-  const probabilities = results.map((result) => simplifiedDistribution[result]);
+  const xLabelsDistribution = simplifyDistribution(distribution, 12);
+  const xLabels = Object.keys(xLabelsDistribution)
+    .map(Number)
+    .sort((a, b) => a - b);
 
   // Determine the maximum probability for scaling
-  const maxProbability = Math.max(...probabilities, 0.0001) * 1.1;
+  const maxProbability =
+    Math.max(...Object.values(barsDistribution), 0.0001) * 1.1;
 
   return (
     <div className="flex flex-row min-h-48 items-stretch w-full pb-6">
@@ -34,38 +39,53 @@ export function DistributionBarChart({
         })}
       </div>
 
-      {/* Chart container */}
-      <div
-        className="flex-grow grid justify-end divide-x divide-x-dashed divide-gray-700"
-        style={{
-          gridTemplateColumns: `repeat(${results.length}, 1fr)`,
-        }}
-      >
-        {/* Bars */}
-        {results.map((result) => {
-          const probability = simplifiedDistribution[result];
-          const heightPercentage = (probability / maxProbability) * 100;
+      <div className="flex-grow flex-col w-full">
+        <div
+          className="flex-grow grid justify-end h-full divide-x divide-x-dashed divide-gray-700"
+          style={{
+            gridTemplateColumns: `repeat(${bars.length}, 1fr)`,
+          }}
+        >
+          {bars.map((result) => {
+            const probability = barsDistribution[result];
+            const heightPercentage = (probability / maxProbability) * 100;
 
-          return (
+            return (
+              <div key={result}>
+                <div
+                  className="bg-gray-800 transition-[height] duration-700 ease-out"
+                  style={{
+                    height: `${100 - heightPercentage}%`,
+                  }}
+                />
+                <div
+                  className={cn("transition-[height] duration-700 ease-out", {
+                    "bg-pink-500": result > 0,
+                  })}
+                  style={{
+                    height: `${heightPercentage}%`,
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        <div
+          className="grid justify-end"
+          style={{
+            gridTemplateColumns: `repeat(${xLabels.length}, 1fr)`,
+          }}
+        >
+          {xLabels.map((result) => (
             <div key={result}>
-              <div
-                className="bg-gray-800"
-                style={{
-                  height: `${100 - heightPercentage}%`,
-                }}
-              />
-              <div
-                className={cn({ "bg-pink-500": result > 0 })}
-                style={{
-                  height: `${heightPercentage}%`,
-                }}
-              />
-
               {/* X-axis label */}
-              <div className="text-center pt-1">{result}</div>
+              <div className="text-center pt-1 transition-opacity duration-500 delay-500">
+                {result}
+              </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
     </div>
   );
