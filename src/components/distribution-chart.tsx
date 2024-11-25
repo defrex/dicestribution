@@ -10,7 +10,8 @@ export function DistributionBarChart({
 }: DistributionBarChartProps) {
   const barsDistribution = simplifyDistribution(
     distribution,
-    Math.min(Object.values(distribution).length, 48)
+    Math.min(Object.values(distribution).length, 64),
+    4
   );
   const bars = Object.keys(barsDistribution)
     .map(Number)
